@@ -20,7 +20,12 @@ public class ReservationServiceImpl implements ReservationService {
         ReservationEntity entity = convertToEntity(reservation);
         return convertToModel(reservationRepository.save(entity));
     }
-    
+
+    @Override
+    public Reservation getReservation(String id) {
+        return convertToModel(reservationRepository.get(id));
+    }
+
     private ReservationEntity convertToEntity(Reservation reservation) {
         return ReservationEntity.builder()
                 .id(createId(reservation.getFirstName(), reservation.getLastName()))
