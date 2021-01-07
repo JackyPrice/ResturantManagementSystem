@@ -51,5 +51,21 @@ class ReservationRepositoryImplTest {
 
     @Test
     void get() {
+        //    given
+        ReservationEntity input = ReservationEntity.builder()
+                .id("tesoof00001")
+                .firstName("test")
+                .lastName("proof")
+                .numberOfGuests(1)
+                .reservationTime(LocalDateTime.parse("2021-01-06T17:00:00"))
+                .build();
+
+        ReservationEntity expected = reservationRepository.save(input);
+
+    //    when
+        ReservationEntity actual = reservationRepository.get("tesoof00001");
+
+    //    then
+        assertEquals(expected, actual);
     }
 }
