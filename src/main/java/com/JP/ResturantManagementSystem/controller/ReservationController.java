@@ -23,11 +23,9 @@ public class ReservationController {
         log.info(reservation.toString());
         return reservationService.createReservation(reservation);
     }
+
     @GetMapping("/reservation")
     public Reservation createReservation(String id) {
         return reservationService.getReservation(id);
     }
-
-
-
 }

@@ -1,13 +1,14 @@
 package com.JP.ResturantManagementSystem.repository;
 
 import com.JP.ResturantManagementSystem.entity.ReservationEntity;
-import lombok.extern.slf4j.Slf4j;
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Repository
+@NoArgsConstructor
 public class ReservationRepositoryImpl implements ReservationRepository{
 
     private final Map<String, ReservationEntity> reservations = new HashMap<String, ReservationEntity>();
