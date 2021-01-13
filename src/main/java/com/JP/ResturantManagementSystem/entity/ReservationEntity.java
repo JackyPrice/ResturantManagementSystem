@@ -19,7 +19,7 @@ public class ReservationEntity {
 
     public static ReservationEntity from(Reservation reservation){
        return ReservationEntity.builder()
-                .id(createId(reservation.getFirstName(), reservation.getLastName()))
+                .id(reservation.getId())
                 .firstName(reservation.getFirstName())
                 .lastName(reservation.getLastName())
                 .reservationTime(reservation.getReservationTime())

@@ -5,6 +5,8 @@ import com.JP.ResturantManagementSystem.model.Reservation;
 import com.JP.ResturantManagementSystem.repository.ReservationRepository;
 import org.springframework.stereotype.Service;
 
+import static com.JP.ResturantManagementSystem.util.IdGenerator.createId;
+
 @Service
 public class ReservationServiceImpl implements ReservationService {
 
@@ -15,8 +17,14 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     public Reservation createReservation(Reservation reservation) {
-        ReservationEntity entity = ReservationEntity.from(reservation);
-        ReservationEntity savedEntity = reservationRepository.save(entity);
+        if(reservation.getId() == null ) {
+           reservation = reservation.toBuilder()
+                   .id(createId(reservation.getFirstName(), reservation.getLastName()))
+                   .build();
+        }
+
+        ReservationEntity newEntity = ReservationEntity.from(reservation);
+        ReservationEntity savedEntity = reservationRepository.save(newEntity);
         return Reservation.from(savedEntity);
     }
 
@@ -24,6 +32,12 @@ public class ReservationServiceImpl implements ReservationService {
     public Reservation getReservation(String id) {
         ReservationEntity savedEntity = reservationRepository.get(id);
         return Reservation.from(savedEntity);
+    }
+
+    @Override
+    public Reservation updateReservation(String id, Reservation reservation) {
+        Reservation updateReservation = reservation.toBuilder().id(id).build();
+        return createReservation(updateReservation);
     }
 
 //TODO: look up MapStruct for model for conversions
