@@ -4,6 +4,7 @@ import com.JP.ResturantManagementSystem.entity.ReservationEntity;
 import com.JP.ResturantManagementSystem.model.Reservation;
 import com.JP.ResturantManagementSystem.repository.ReservationRepositoryImpl;
 import com.JP.ResturantManagementSystem.util.IdGenerator;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,8 +14,9 @@ import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -35,7 +37,7 @@ class ReservationServiceImplTest {
     }
 
     @AfterEach
-    void teardown(){
+    void teardown() {
     }
 
     @Test
@@ -143,7 +145,45 @@ class ReservationServiceImplTest {
     }
 
     @Test
-    void updateRerservation(){
+    void getAllReservations() {
+        //    given
+        Reservation reservation1 = Reservation.builder()
+                .id("tesion10001")
+                .firstName("test")
+                .lastName("reservation")
+                .reservationTime(now)
+                .numberOfGuests(2)
+                .build();
+
+        Reservation reservation2 = Reservation.builder()
+                .id("tesion10002")
+                .firstName("test")
+                .lastName("reservation")
+                .reservationTime(now)
+                .numberOfGuests(2)
+                .build();
+
+        Reservation reservation3 = Reservation.builder()
+                .id("tesion10003")
+                .firstName("test")
+                .lastName("reservation")
+                .reservationTime(now)
+                .numberOfGuests(2)
+                .build();
+
+        List<Reservation> expectedReservationList = List.of(reservation1, reservation2, reservation3);
+
+        //    when
+        when(reservationRepository.getAll()).thenReturn(expectedReservationList);
+
+        List<Reservation> actualReservationList = reservationServiceImpl.getReservations();
+
+        //    then
+        assertEquals(actualReservationList, expectedReservationList);
+    }
+
+    @Test
+    void updateRerservation() {
         //    given
         String id = "tesion10000";
         Reservation updateReservation = Reservation.builder()
@@ -188,7 +228,7 @@ class ReservationServiceImplTest {
     }
 
     @Test
-    void deleteReservation(){
+    void deleteReservation() {
 
         //given
         String id = "tesion10000";

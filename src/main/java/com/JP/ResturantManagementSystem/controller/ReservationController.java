@@ -5,6 +5,8 @@ import com.JP.ResturantManagementSystem.service.ReservationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @Slf4j
 public class ReservationController {
@@ -24,6 +26,11 @@ public class ReservationController {
     @GetMapping("/reservation")
     public Reservation getReservation(String id) {
         return reservationService.getReservation(id);
+    }
+
+    @GetMapping("/reservations")
+    public List<Reservation> getReservations() {
+        return reservationService.getReservations();
     }
 
     @PutMapping("/reservation/{id}")

@@ -1,10 +1,13 @@
 package com.JP.ResturantManagementSystem.repository;
 
 import com.JP.ResturantManagementSystem.entity.ReservationEntity;
+import com.JP.ResturantManagementSystem.model.Reservation;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Repository
@@ -22,6 +25,15 @@ public class ReservationRepositoryImpl implements ReservationRepository{
     @Override
     public ReservationEntity get(String id) {
         return reservations.get(id);
+    }
+
+    @Override
+    public List<Reservation> getAll() {
+        List<Reservation> reservationList = new ArrayList<>();
+        for(ReservationEntity reservationEntity: reservations.values()) {
+            reservationList.add(Reservation.from(reservationEntity));
+        }
+        return reservationList;
     }
 
     @Override

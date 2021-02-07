@@ -5,7 +5,9 @@ import com.JP.ResturantManagementSystem.model.Reservation;
 import com.JP.ResturantManagementSystem.repository.ReservationRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.List;
+
+import static com.JP.ResturantManagementSystem.util.IdGenerator.createId;
 
 
 @Service
@@ -34,6 +36,11 @@ public class ReservationServiceImpl implements ReservationService {
     public Reservation getReservation(String id) {
         ReservationEntity savedEntity = reservationRepository.get(id);
         return Reservation.from(savedEntity);
+    }
+
+    @Override
+    public List<Reservation> getReservations() {
+        return reservationRepository.getAll();
     }
 
     @Override
