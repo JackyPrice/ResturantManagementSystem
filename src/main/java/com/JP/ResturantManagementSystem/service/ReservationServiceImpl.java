@@ -42,9 +42,9 @@ public class ReservationServiceImpl implements ReservationService {
         return createReservation(updateReservation);
     }
 
-    public String createId(String firstName, String lastName) {
-        int randomNum = ThreadLocalRandom.current().nextInt(10000, 99999 + 1);
-        return firstName.substring(0, 3) + lastName.substring(lastName.length() - 3) + randomNum;
+    @Override
+    public void deleteReservation(String id) {
+        reservationRepository.deleteById(id);
     }
 
 //TODO: look up MapStruct for model for conversions

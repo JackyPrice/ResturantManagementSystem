@@ -30,4 +30,9 @@ public class ReservationController {
     public Reservation updateReservation(@PathVariable String id, @RequestBody Reservation reservation){
         return reservationService.updateReservation(id, reservation);
     }
+
+    @DeleteMapping("/reservation/{id}")
+    public void deleteReservation(@PathVariable String id){
+        reservationService.deleteReservation(id);
+    }
 }

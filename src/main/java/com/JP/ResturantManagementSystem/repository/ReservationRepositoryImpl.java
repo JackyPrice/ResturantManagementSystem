@@ -23,4 +23,9 @@ public class ReservationRepositoryImpl implements ReservationRepository{
     public ReservationEntity get(String id) {
         return reservations.get(id);
     }
+
+    @Override
+    public void deleteById(String id) {
+        reservations.remove(id);
+    }
 }

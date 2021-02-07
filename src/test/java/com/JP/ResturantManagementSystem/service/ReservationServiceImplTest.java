@@ -158,7 +158,7 @@ class ReservationServiceImplTest {
 
     @Test
     void updateRerservation(){
-    //    given
+        //    given
         String id = "tesion10000";
         Reservation updateReservation = Reservation.builder()
                 .firstName("test")
@@ -191,10 +191,10 @@ class ReservationServiceImplTest {
                 .numberOfGuests(2)
                 .build();
 
-    //    when
+        //    when
         when(reservationRepository.save(updateEntity)).thenReturn(savedEntity);
 
-    //    then
+        //    then
 
         Reservation actualReservation = reservationServiceImpl.updateReservation(id, updateReservation);
 
