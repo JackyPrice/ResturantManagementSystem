@@ -5,7 +5,8 @@ import com.JP.ResturantManagementSystem.model.Reservation;
 import com.JP.ResturantManagementSystem.repository.ReservationRepository;
 import org.springframework.stereotype.Service;
 
-import static com.JP.ResturantManagementSystem.util.IdGenerator.createId;
+import java.util.concurrent.ThreadLocalRandom;
+
 
 @Service
 public class ReservationServiceImpl implements ReservationService {
@@ -16,6 +17,7 @@ public class ReservationServiceImpl implements ReservationService {
         this.reservationRepository = reservationRepository;
     }
 
+    @Override
     public Reservation createReservation(Reservation reservation) {
         if(reservation.getId() == null ) {
            reservation = reservation.toBuilder()
@@ -38,6 +40,11 @@ public class ReservationServiceImpl implements ReservationService {
     public Reservation updateReservation(String id, Reservation reservation) {
         Reservation updateReservation = reservation.toBuilder().id(id).build();
         return createReservation(updateReservation);
+    }
+
+    public String createId(String firstName, String lastName) {
+        int randomNum = ThreadLocalRandom.current().nextInt(10000, 99999 + 1);
+        return firstName.substring(0, 3) + lastName.substring(lastName.length() - 3) + randomNum;
     }
 
 //TODO: look up MapStruct for model for conversions

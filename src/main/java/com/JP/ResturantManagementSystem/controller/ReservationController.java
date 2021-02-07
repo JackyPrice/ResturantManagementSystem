@@ -22,7 +22,7 @@ public class ReservationController {
     }
 
     @GetMapping("/reservation")
-    public Reservation createReservation(String id) {
+    public Reservation getReservation(String id) {
         return reservationService.getReservation(id);
     }
 

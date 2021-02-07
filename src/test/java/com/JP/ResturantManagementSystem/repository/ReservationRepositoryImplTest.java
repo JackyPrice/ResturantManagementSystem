@@ -50,9 +50,10 @@ class ReservationRepositoryImplTest {
     }
 
     @Test
+    @DisplayName("Given valid id for saved customer, when get endpoint is called, then expected reservation is returned")
     void get() {
         //    given
-        ReservationEntity input = ReservationEntity.builder()
+        ReservationEntity validInput = ReservationEntity.builder()
                 .id("tesoof00001")
                 .firstName("test")
                 .lastName("proof")
@@ -60,7 +61,7 @@ class ReservationRepositoryImplTest {
                 .reservationTime(LocalDateTime.parse("2021-01-06T17:00:00"))
                 .build();
 
-        ReservationEntity expected = reservationRepository.save(input);
+        ReservationEntity expected = reservationRepository.save(validInput);
 
     //    when
         ReservationEntity actual = reservationRepository.get("tesoof00001");
