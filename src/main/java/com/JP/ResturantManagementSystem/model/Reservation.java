@@ -1,5 +1,6 @@
 package com.JP.ResturantManagementSystem.model;
 
+import com.JP.ResturantManagementSystem.entity.H2ReservationEntity;
 import com.JP.ResturantManagementSystem.entity.ReservationEntity;
 import lombok.Builder;
 import lombok.Data;
@@ -22,6 +23,15 @@ public class Reservation {
                 .lastName(reservationEntity.getLastName())
                 .reservationTime(reservationEntity.getReservationTime())
                 .numberOfGuests(reservationEntity.getNumberOfGuests())
+                .build();
+    }
+        public static Reservation from(H2ReservationEntity h2ReservationEntity){
+        return Reservation.builder()
+                .id(h2ReservationEntity.getId())
+                .firstName(h2ReservationEntity.getFirstName())
+                .lastName(h2ReservationEntity.getLastName())
+                .reservationTime(h2ReservationEntity.getReservationTime())
+                .numberOfGuests(h2ReservationEntity.getNumberOfGuests())
                 .build();
     }
 }
