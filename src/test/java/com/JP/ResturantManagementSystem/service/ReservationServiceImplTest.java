@@ -14,9 +14,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mockStatic;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ReservationServiceImplTest {
@@ -32,24 +31,11 @@ class ReservationServiceImplTest {
     @BeforeEach
     void setup() {
         now = LocalDateTime.now();
-        ReservationEntity testData1 = ReservationEntity.builder()
-                .id("tesion10000")
-                .firstName("test")
-                .lastName("reservation")
-                .reservationTime(now)
-                .numberOfGuests(2)
-                .build();
 
-        ReservationEntity testData2 = ReservationEntity.builder()
-                .id("tesion10001")
-                .firstName("test2")
-                .lastName("reservation2")
-                .reservationTime(now)
-                .numberOfGuests(4)
-                .build();
+    }
 
-        reservationRepository.save(testData1);
-        reservationRepository.save(testData2);
+    @AfterEach
+    void teardown(){
     }
 
     @Test
@@ -199,5 +185,18 @@ class ReservationServiceImplTest {
         Reservation actualReservation = reservationServiceImpl.updateReservation(id, updateReservation);
 
         assertEquals(actualReservation, expectedReservation);
+    }
+
+    @Test
+    void deleteReservation(){
+
+        //given
+        String id = "tesion10000";
+
+        //when
+        reservationServiceImpl.deleteReservation(id);
+
+        //then
+        verify(reservationRepository).deleteById(id);
     }
 }
