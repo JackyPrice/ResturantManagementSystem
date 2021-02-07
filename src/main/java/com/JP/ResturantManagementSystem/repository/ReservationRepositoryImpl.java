@@ -5,10 +5,10 @@ import com.JP.ResturantManagementSystem.model.Reservation;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Repository
 @NoArgsConstructor
@@ -29,11 +29,9 @@ public class ReservationRepositoryImpl implements ReservationRepository{
 
     @Override
     public List<Reservation> getAll() {
-        List<Reservation> reservationList = new ArrayList<>();
-        for(ReservationEntity reservationEntity: reservations.values()) {
-            reservationList.add(Reservation.from(reservationEntity));
-        }
-        return reservationList;
+       return reservations.values().stream()
+                .map(reservationEntity -> Reservation.from(reservationEntity))
+                .collect(Collectors.toList());
     }
 
     @Override
