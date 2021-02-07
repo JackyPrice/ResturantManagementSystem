@@ -13,8 +13,8 @@ public class ReservationController {
 
     private final ReservationService reservationService;
 
-    public ReservationController(ReservationService reservationService) {
-        this.reservationService = reservationService;
+    public ReservationController(ReservationService h2ReservationService) {
+        this.reservationService = h2ReservationService;
     }
 
     @PostMapping("/reservation")
