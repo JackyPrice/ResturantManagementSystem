@@ -3,13 +3,14 @@ package com.JP.ResturantManagementSystem.service;
 import com.JP.ResturantManagementSystem.entity.ReservationEntity;
 import com.JP.ResturantManagementSystem.model.Reservation;
 import com.JP.ResturantManagementSystem.repository.ReservationRepository;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 import static com.JP.ResturantManagementSystem.util.IdGenerator.createId;
 
-
+@Profile("map")
 @Service
 public class ReservationServiceImpl implements ReservationService {
 
