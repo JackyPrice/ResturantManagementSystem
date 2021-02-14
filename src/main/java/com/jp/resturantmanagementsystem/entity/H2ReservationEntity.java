@@ -1,6 +1,6 @@
-package com.JP.ResturantManagementSystem.entity;
+package com.jp.resturantmanagementsystem.entity;
 
-import com.JP.ResturantManagementSystem.model.Reservation;
+import com.jp.resturantmanagementsystem.model.Reservation;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

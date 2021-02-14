@@ -1,4 +1,4 @@
-package com.JP.ResturantManagementSystem.util;
+package com.jp.resturantmanagementsystem.util;
 
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,6 @@
-package com.JP.ResturantManagementSystem.repository;
+package com.jp.resturantmanagementsystem.repository;
 
-import com.JP.ResturantManagementSystem.entity.H2ReservationEntity;
+import com.jp.resturantmanagementsystem.entity.H2ReservationEntity;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

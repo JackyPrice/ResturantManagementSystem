@@ -1,9 +1,10 @@
-package com.JP.ResturantManagementSystem.service;
+package com.jp.resturantmanagementsystem.service;
 
-import com.JP.ResturantManagementSystem.entity.H2ReservationEntity;
-import com.JP.ResturantManagementSystem.model.Reservation;
-import com.JP.ResturantManagementSystem.repository.H2ReservationRespository;
-import com.JP.ResturantManagementSystem.util.IdGenerator;
+import com.jp.resturantmanagementsystem.entity.H2ReservationEntity;
+import com.jp.resturantmanagementsystem.model.Reservation;
+import com.jp.resturantmanagementsystem.repository.H2ReservationRespository;
+import com.jp.resturantmanagementsystem.util.IdGenerator;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
@@ -13,17 +14,20 @@ import java.util.stream.Collectors;
 
 @Profile("h2")
 @Service
+@Slf4j
 public class H2ReservationServiceImpl implements ReservationService{
 
     private H2ReservationRespository h2ReservationRespository;
+    private IdGenerator idGenerator;
 
-    public H2ReservationServiceImpl(H2ReservationRespository h2ReservationRespository) {
+    public H2ReservationServiceImpl(H2ReservationRespository h2ReservationRespository, IdGenerator idGenerator) {
         this.h2ReservationRespository = h2ReservationRespository;
+        this.idGenerator = idGenerator;
     }
 
     @Override
     public Reservation createReservation(Reservation reservation) {
-        System.out.println("\n\n\nH2 Service");
+        log.info("H2 Service is in effect");
         if(reservation.getId() == null ) {
             reservation = reservation.toBuilder()
                     .id(idGenerator.createId(reservation.getFirstName(), reservation.getLastName()))

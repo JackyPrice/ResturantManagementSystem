@@ -1,6 +1,6 @@
-package com.JP.ResturantManagementSystem.repository;
+package com.jp.resturantmanagementsystem.repository;
 
-import com.JP.ResturantManagementSystem.entity.ReservationEntity;
+import com.jp.resturantmanagementsystem.entity.ReservationEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,6 @@ class ReservationRepositoryImplTest {
     void setUp() {
     }
 
-    @Autowired
     private ReservationRepositoryImpl reservationRepository;
 
 

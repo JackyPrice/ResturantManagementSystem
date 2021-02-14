@@ -1,7 +1,7 @@
-package com.JP.ResturantManagementSystem.controller;
+package com.jp.resturantmanagementsystem.controller;
 
-import com.JP.ResturantManagementSystem.model.Reservation;
-import com.JP.ResturantManagementSystem.service.ReservationService;
+import com.jp.resturantmanagementsystem.model.Reservation;
+import com.jp.resturantmanagementsystem.service.ReservationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 

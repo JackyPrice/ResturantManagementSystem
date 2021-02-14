@@ -1,9 +1,10 @@
-package com.JP.ResturantManagementSystem.service;
+package com.jp.resturantmanagementsystem.service;
 
-import com.JP.ResturantManagementSystem.entity.ReservationEntity;
-import com.JP.ResturantManagementSystem.model.Reservation;
-import com.JP.ResturantManagementSystem.repository.ReservationRepository;
-import com.JP.ResturantManagementSystem.util.IdGenerator;
+import com.jp.resturantmanagementsystem.entity.ReservationEntity;
+import com.jp.resturantmanagementsystem.model.Reservation;
+import com.jp.resturantmanagementsystem.repository.ReservationRepository;
+import com.jp.resturantmanagementsystem.util.IdGenerator;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,7 @@ import java.util.List;
 
 @Profile("map")
 @Service
+@Slf4j
 public class ReservationServiceImpl implements ReservationService {
 
     private final ReservationRepository reservationRepository;
@@ -24,15 +26,12 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public Reservation createReservation(Reservation reservation) {
-        System.out.println("\n\n\n\n Input Reservation in service: " + reservation);
-        // System.out.println("\n\nmap service");
+        log.info("Map Service is in effect");
         if(reservation.getId() == null ) {
             reservation = reservation.toBuilder()
                     .id(idGenerator.createId(reservation.getFirstName(), reservation.getLastName()))
                     .build();
-            System.out.println("\n\n\n\n Reservation id generated: " + reservation.getId());
         }
-
 
         ReservationEntity newEntity = ReservationEntity.from(reservation);
         ReservationEntity savedEntity = reservationRepository.save(newEntity);

@@ -1,51 +1,47 @@
-package com.JP.ResturantManagementSystem.service;
+package com.jp.resturantmanagementsystem.service;
 
-import com.JP.ResturantManagementSystem.entity.ReservationEntity;
-import com.JP.ResturantManagementSystem.model.Reservation;
-import com.JP.ResturantManagementSystem.repository.ReservationRepositoryImpl;
-import com.JP.ResturantManagementSystem.util.IdGenerator;
-import org.junit.jupiter.api.AfterEach;
+import com.jp.resturantmanagementsystem.entity.H2ReservationEntity;
+import com.jp.resturantmanagementsystem.model.Reservation;
+import com.jp.resturantmanagementsystem.repository.H2ReservationRespository;
+import com.jp.resturantmanagementsystem.util.IdGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-
+import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
-
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class ReservationServiceImplTest {
+class H2ReservationServiceImplTest {
 
     @Mock
-    private ReservationRepositoryImpl reservationRepository;
-
+    private H2ReservationRespository h2ReservationRepository;
     @Mock
     private IdGenerator idGenerator;
 
     @InjectMocks
-    private ReservationServiceImpl reservationServiceImpl;
+    private H2ReservationServiceImpl h2ReservationServiceImpl;
 
     private LocalDateTime now;
+
     private Reservation expectedReservation1;
     private Reservation expectedReservation2;
     private Reservation expectedReservation3;
-    private ReservationEntity savedReservationEntity1;
-    private ReservationEntity savedReservationEntity2;
-    private ReservationEntity savedReservationEntity3;
+    private H2ReservationEntity savedH2ReservationEntity1;
+    private H2ReservationEntity savedH2ReservationEntity2;
+    private H2ReservationEntity savedH2ReservationEntity3;
 
     @BeforeEach
     void setup() {
         now = LocalDateTime.now();
-
         expectedReservation1 = Reservation.builder()
                 .id("tesion10000")
                 .firstName("test1")
@@ -54,7 +50,7 @@ class ReservationServiceImplTest {
                 .numberOfGuests(2)
                 .build();
 
-        savedReservationEntity1 = ReservationEntity.builder()
+        savedH2ReservationEntity1 = H2ReservationEntity.builder()
                 .id("tesion10000")
                 .firstName("test1")
                 .lastName("reservation")
@@ -70,7 +66,7 @@ class ReservationServiceImplTest {
                 .numberOfGuests(4)
                 .build();
 
-        savedReservationEntity2 = ReservationEntity.builder()
+        savedH2ReservationEntity2 = H2ReservationEntity.builder()
                 .id("tesion10001")
                 .firstName("test2")
                 .lastName("reservation2")
@@ -86,26 +82,20 @@ class ReservationServiceImplTest {
                 .numberOfGuests(2)
                 .build();
 
-        savedReservationEntity3 = ReservationEntity.builder()
+        savedH2ReservationEntity3 = H2ReservationEntity.builder()
                 .id("tesion10003")
                 .firstName("test3")
                 .lastName("reservation3")
                 .reservationTime(now)
                 .numberOfGuests(2)
                 .build();
-
     }
-
-    @AfterEach
-    void teardown() {
-    }
-
-
 
     @Test
     @DisplayName("given a reservation without without an Id, when reservation is saved then an id is created")
     void createReservation() {
         //given
+
         Reservation inputReservation1 = Reservation.builder()
                 .firstName("test1")
                 .lastName("reservation")
@@ -113,10 +103,14 @@ class ReservationServiceImplTest {
                 .numberOfGuests(2)
                 .build();
 
-        when(idGenerator.createId(inputReservation1.getFirstName(), inputReservation1.getLastName())).thenReturn("tesion10000");
-        when(reservationRepository.save(savedReservationEntity1)).thenReturn(savedReservationEntity1);
+        //when
+        try (MockedStatic<IdGenerator> mockRandom = mockStatic(IdGenerator.class)) {
+            mockRandom.when(() -> idGenerator.createId(expectedReservation1.getFirstName(), expectedReservation1.getLastName())).thenReturn("tesion10000");
+        }
 
-        Reservation actualReservation = reservationServiceImpl.createReservation(inputReservation1);
+        when(h2ReservationRepository.save(savedH2ReservationEntity1)).thenReturn(savedH2ReservationEntity1);
+
+        Reservation actualReservation = h2ReservationServiceImpl.createReservation(inputReservation1);
 
         //then
         assertEquals(expectedReservation1, actualReservation);
@@ -129,15 +123,14 @@ class ReservationServiceImplTest {
         //    given
         String id1 = "tesion10000";
         String id2 = "tesion10001";
-        //TODO: change to parameterisd query
 
         //    when
-        when(reservationRepository.get(id1)).thenReturn(savedReservationEntity1);
-        when(reservationRepository.get(id2)).thenReturn(savedReservationEntity2);
+        when(h2ReservationRepository.getById(id1)).thenReturn(savedH2ReservationEntity1);
+        when(h2ReservationRepository.getById(id2)).thenReturn(savedH2ReservationEntity2);
 
         //    then
-        Reservation actualReservation1 = reservationServiceImpl.getReservation(id1);
-        Reservation actualReservation2 = reservationServiceImpl.getReservation(id2);
+        Reservation actualReservation1 = h2ReservationServiceImpl.getReservation(id1);
+        Reservation actualReservation2 = h2ReservationServiceImpl.getReservation(id2);
 
         assertEquals(expectedReservation1, actualReservation1);
         assertEquals(expectedReservation2, actualReservation2);
@@ -148,12 +141,16 @@ class ReservationServiceImplTest {
     @DisplayName("when getReservations is called, then a list of all reservations are returned")
     void getAllReservations() {
         //    given
-        List<Reservation> expectedReservationList = List.of(expectedReservation1, expectedReservation2, expectedReservation3);
+
+        List<H2ReservationEntity> savedReservationEntityList = List.of(savedH2ReservationEntity1,savedH2ReservationEntity2,savedH2ReservationEntity3);
+
+        List<Reservation> expectedReservationList = List.of(expectedReservation1, expectedReservation2,expectedReservation3);
 
         //    when
-        when(reservationRepository.getAll()).thenReturn(expectedReservationList);
+        when(h2ReservationRepository.findAll()).thenReturn(savedReservationEntityList);
 
-        List<Reservation> actualReservationList = reservationServiceImpl.getReservations();
+        List<Reservation> actualReservationList = h2ReservationServiceImpl.getReservations();
+        System.out.println(actualReservationList);
 
         //    then
         assertEquals(actualReservationList, expectedReservationList);
@@ -164,6 +161,7 @@ class ReservationServiceImplTest {
     void updateRerservation() {
         //    given
         String id = "tesion10000";
+
         Reservation updateReservation = Reservation.builder()
                 .firstName("update")
                 .lastName("reservation")
@@ -171,7 +169,7 @@ class ReservationServiceImplTest {
                 .numberOfGuests(2)
                 .build();
 
-        ReservationEntity updateEntity = ReservationEntity.builder()
+        H2ReservationEntity updateEntity = H2ReservationEntity.builder()
                 .id("tesion10000")
                 .firstName("update")
                 .lastName("reservation")
@@ -179,22 +177,33 @@ class ReservationServiceImplTest {
                 .numberOfGuests(2)
                 .build();
 
-        Reservation expectedUpdateEntity = Reservation.builder()
+        H2ReservationEntity savedEntity = H2ReservationEntity.builder()
                 .id("tesion10000")
                 .firstName("update")
                 .lastName("reservation")
                 .reservationTime(now)
                 .numberOfGuests(2)
                 .build();
+
+        Reservation expectedReservation = Reservation.builder()
+                .id("tesion10000")
+                .firstName("update")
+                .lastName("reservation")
+                .reservationTime(now)
+                .numberOfGuests(2)
+                .build();
+
+        // h2ReservationRepository.save(expectedReservation1)
+
 
         //    when
-        when(reservationRepository.save(updateEntity)).thenReturn(updateEntity);
+        when(h2ReservationRepository.save(updateEntity)).thenReturn(savedEntity);
 
         //    then
 
-        Reservation actualReservation = reservationServiceImpl.updateReservation(id, updateReservation);
+        Reservation actualReservation = h2ReservationServiceImpl.updateReservation(id, updateReservation);
 
-        assertEquals(expectedUpdateEntity, actualReservation);
+        assertEquals(actualReservation, expectedReservation);
     }
 
     @Test
@@ -205,9 +214,12 @@ class ReservationServiceImplTest {
         String id = "tesion10000";
 
         //when
-        reservationServiceImpl.deleteReservation(id);
+        h2ReservationServiceImpl.deleteReservation(id);
 
         //then
-        verify(reservationRepository).deleteById(id);
+        verify(h2ReservationRepository).deleteById(id);
     }
 }
+
+
+

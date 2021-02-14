@@ -1,4 +1,4 @@
-package com.JP.ResturantManagementSystem;
+package com.jp.resturantmanagementsystem;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

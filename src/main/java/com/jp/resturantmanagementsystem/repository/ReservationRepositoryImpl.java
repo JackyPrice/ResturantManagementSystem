@@ -1,7 +1,7 @@
-package com.JP.ResturantManagementSystem.repository;
+package com.jp.resturantmanagementsystem.repository;
 
-import com.JP.ResturantManagementSystem.entity.ReservationEntity;
-import com.JP.ResturantManagementSystem.model.Reservation;
+import com.jp.resturantmanagementsystem.entity.ReservationEntity;
+import com.jp.resturantmanagementsystem.model.Reservation;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Repository;
 

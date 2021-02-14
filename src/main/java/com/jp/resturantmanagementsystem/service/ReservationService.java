@@ -1,6 +1,6 @@
-package com.JP.ResturantManagementSystem.service;
+package com.jp.resturantmanagementsystem.service;
 
-import com.JP.ResturantManagementSystem.model.Reservation;
+import com.jp.resturantmanagementsystem.model.Reservation;
 import java.util.List;
 
 public interface ReservationService {

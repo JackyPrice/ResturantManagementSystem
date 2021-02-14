@@ -1,9 +1,9 @@
-package com.JP.ResturantManagementSystem.configuration;
+package com.jp.resturantmanagementsystem.configuration;
 
-import com.JP.ResturantManagementSystem.repository.ReservationRepository;
-import com.JP.ResturantManagementSystem.service.ReservationService;
-import com.JP.ResturantManagementSystem.service.ReservationServiceImpl;
-import com.JP.ResturantManagementSystem.util.IdGenerator;
+import com.jp.resturantmanagementsystem.repository.ReservationRepository;
+import com.jp.resturantmanagementsystem.service.ReservationService;
+import com.jp.resturantmanagementsystem.service.ReservationServiceImpl;
+import com.jp.resturantmanagementsystem.util.IdGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
