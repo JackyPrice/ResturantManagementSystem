@@ -3,26 +3,29 @@ package com.JP.ResturantManagementSystem.service;
 import com.JP.ResturantManagementSystem.entity.H2ReservationEntity;
 import com.JP.ResturantManagementSystem.model.Reservation;
 import com.JP.ResturantManagementSystem.repository.H2ReservationRespository;
-import org.junit.jupiter.api.AfterEach;
+import com.JP.ResturantManagementSystem.util.IdGenerator;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class H2ReservationServiceImplTest {
 
     @Mock
     private H2ReservationRespository h2ReservationRepository;
+    @Mock
+    private IdGenerator idGenerator;
 
     @InjectMocks
     private H2ReservationServiceImpl h2ReservationServiceImpl;
@@ -79,7 +82,7 @@ class H2ReservationServiceImplTest {
                 .numberOfGuests(2)
                 .build();
 
-        savedH2ReservationEntity2 = H2ReservationEntity.builder()
+        savedH2ReservationEntity3 = H2ReservationEntity.builder()
                 .id("tesion10003")
                 .firstName("test3")
                 .lastName("reservation3")
@@ -88,12 +91,33 @@ class H2ReservationServiceImplTest {
                 .build();
     }
 
-    @AfterEach
-    void teardown() {
+    @Test
+    @DisplayName("given a reservation without without an Id, when reservation is saved then an id is created")
+    void createReservation() {
+        //given
 
+        Reservation inputReservation1 = Reservation.builder()
+                .firstName("test1")
+                .lastName("reservation")
+                .reservationTime(now)
+                .numberOfGuests(2)
+                .build();
+
+        //when
+        try (MockedStatic<IdGenerator> mockRandom = mockStatic(IdGenerator.class)) {
+            mockRandom.when(() -> idGenerator.createId(expectedReservation1.getFirstName(), expectedReservation1.getLastName())).thenReturn("tesion10000");
+        }
+
+        when(h2ReservationRepository.save(savedH2ReservationEntity1)).thenReturn(savedH2ReservationEntity1);
+
+        Reservation actualReservation = h2ReservationServiceImpl.createReservation(inputReservation1);
+
+        //then
+        assertEquals(expectedReservation1, actualReservation);
     }
 
     @Test
+    @DisplayName("given valid id, when get is called with id, then the correct reservation is returned")
     void getReservation() {
 
         //    given
@@ -101,10 +125,8 @@ class H2ReservationServiceImplTest {
         String id2 = "tesion10001";
 
         //    when
-        when(h2ReservationRepository.getById(id1))
-                .thenReturn(savedH2ReservationEntity1);
-        when(h2ReservationRepository.getById(id2))
-                .thenReturn(savedH2ReservationEntity2);
+        when(h2ReservationRepository.getById(id1)).thenReturn(savedH2ReservationEntity1);
+        when(h2ReservationRepository.getById(id2)).thenReturn(savedH2ReservationEntity2);
 
         //    then
         Reservation actualReservation1 = h2ReservationServiceImpl.getReservation(id1);
@@ -116,6 +138,7 @@ class H2ReservationServiceImplTest {
     }
 
     @Test
+    @DisplayName("when getReservations is called, then a list of all reservations are returned")
     void getAllReservations() {
         //    given
 
@@ -134,6 +157,7 @@ class H2ReservationServiceImplTest {
     }
 
     @Test
+    @DisplayName("given a valid update reservation, when update is called, then reservation of the same id is replaced with update reservation")
     void updateRerservation() {
         //    given
         String id = "tesion10000";
@@ -183,6 +207,7 @@ class H2ReservationServiceImplTest {
     }
 
     @Test
+    @DisplayName("given a valid id, when delete is called, the repository is called to delete the entity")
     void deleteReservation() {
 
         //given

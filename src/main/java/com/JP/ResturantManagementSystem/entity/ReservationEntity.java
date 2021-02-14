@@ -24,5 +24,4 @@ public class ReservationEntity {
                 .numberOfGuests(reservation.getNumberOfGuests())
                 .build();
     }
-
 }
