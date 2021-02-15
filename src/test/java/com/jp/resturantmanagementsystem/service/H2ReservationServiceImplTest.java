@@ -16,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -38,6 +39,7 @@ class H2ReservationServiceImplTest {
     private H2ReservationEntity savedH2ReservationEntity1;
     private H2ReservationEntity savedH2ReservationEntity2;
     private H2ReservationEntity savedH2ReservationEntity3;
+
 
     @BeforeEach
     void setup() {
@@ -89,6 +91,11 @@ class H2ReservationServiceImplTest {
                 .reservationTime(now)
                 .numberOfGuests(2)
                 .build();
+    }
+
+    @Test
+    void checkComponents(){
+        assertThat(h2ReservationRepository).isNotNull();
     }
 
     @Test

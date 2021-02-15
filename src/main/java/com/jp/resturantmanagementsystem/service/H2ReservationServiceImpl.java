@@ -17,8 +17,8 @@ import java.util.stream.Collectors;
 @Slf4j
 public class H2ReservationServiceImpl implements ReservationService{
 
-    private H2ReservationRespository h2ReservationRespository;
-    private IdGenerator idGenerator;
+    private final H2ReservationRespository h2ReservationRespository;
+    private final IdGenerator idGenerator;
 
     public H2ReservationServiceImpl(H2ReservationRespository h2ReservationRespository, IdGenerator idGenerator) {
         this.h2ReservationRespository = h2ReservationRespository;
@@ -48,7 +48,7 @@ public class H2ReservationServiceImpl implements ReservationService{
     @Override
     public List<Reservation> getReservations() {
         return h2ReservationRespository.findAll()
-                .stream().map(h2ReservationEntity -> Reservation.from(h2ReservationEntity))
+                .stream().map(Reservation::from)
                 .collect(Collectors.toList());
     }
 
