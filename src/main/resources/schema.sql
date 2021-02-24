@@ -1,11 +1,9 @@
-DROP TABLE IF EXISTS reservations;
-
-CREATE TABLE reservations
+CREATE TABLE IF NOT EXISTS reservations
 (
-    id               VARCHAR(11)  NOT NULL,
-    first_name       VARCHAR(255) NULL,
-    last_name        VARCHAR(255) NULL,
-    reservation_time DATETIME     NULL,
-    number_of_guests INT          NULL
+    id VARCHAR(11) NOT NULL
+        PRIMARY KEY ,
+    firstName VARCHAR(255) NULL,
+    lastName VARCHAR(255) NULL,
+    reservationTime DATETIME NULL,
+    numberOfGuests INT Null
 );
-
