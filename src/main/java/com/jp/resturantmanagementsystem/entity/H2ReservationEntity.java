@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -21,9 +22,13 @@ public class H2ReservationEntity {
 
     @Id
     private String id;
+    @Column(name= "first_name")
     private String firstName;
+    @Column(name= "last_name")
     private String lastName;
+    @Column(name= "reservation_time")
     private LocalDateTime reservationTime;
+    @Column(name= "number_of_guests")
     private int numberOfGuests;
 
     public static H2ReservationEntity from(Reservation reservation) {

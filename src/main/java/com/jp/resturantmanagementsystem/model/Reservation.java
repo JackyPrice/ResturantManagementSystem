@@ -1,5 +1,7 @@
 package com.jp.resturantmanagementsystem.model;
 
+import com.jp.resturantmanagementsystem.entity.DockerReservationEntity;
+// import com.jp.resturantmanagementsystem.entity.H2ReservationEntity;
 import com.jp.resturantmanagementsystem.entity.H2ReservationEntity;
 import com.jp.resturantmanagementsystem.entity.ReservationEntity;
 import lombok.AllArgsConstructor;
@@ -38,4 +40,15 @@ public class Reservation {
                 .numberOfGuests(h2ReservationEntity.getNumberOfGuests())
                 .build();
     }
+        public static Reservation from(DockerReservationEntity dockerReservationEntity){
+        return Reservation.builder()
+                .id(dockerReservationEntity.getId())
+                .firstName(dockerReservationEntity.getFirstName())
+                .lastName(dockerReservationEntity.getLastName())
+                .reservationTime(dockerReservationEntity.getReservationTime())
+                .numberOfGuests(dockerReservationEntity.getNumberOfGuests())
+                .build();
+    }
+
+
 }
