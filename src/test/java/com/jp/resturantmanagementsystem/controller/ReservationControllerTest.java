@@ -160,8 +160,6 @@ class ReservationControllerTest {
         verify(reservationService).deleteReservation(id);
     }
 
-
-
     private String asJsonString(Reservation reservation) {
         return "{" +
                 "\"id\":\"" + reservation.getId() + "\"," +
@@ -193,13 +191,5 @@ class ReservationControllerTest {
                 + reservationTime.getMinute() + ","
                 + reservationTime.getSecond() + ","
                 + reservationTime.getNano();
-    }
-
-    private static String asJsonStringObjectMapper(final Object obj) {
-        try {
-            return new ObjectMapper().writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 }

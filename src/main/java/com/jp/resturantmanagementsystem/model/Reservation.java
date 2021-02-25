@@ -1,9 +1,7 @@
 package com.jp.resturantmanagementsystem.model;
 
-import com.jp.resturantmanagementsystem.entity.DockerReservationEntity;
-// import com.jp.resturantmanagementsystem.entity.H2ReservationEntity;
-import com.jp.resturantmanagementsystem.entity.H2ReservationEntity;
 import com.jp.resturantmanagementsystem.entity.ReservationEntity;
+// import com.jp.resturantmanagementsystem.entity.H2ReservationEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,25 +20,7 @@ public class Reservation {
     private LocalDateTime reservationTime;
     private int numberOfGuests;
 
-    public static Reservation from(ReservationEntity reservationEntity){
-        return Reservation.builder()
-                .id(reservationEntity.getId())
-                .firstName(reservationEntity.getFirstName())
-                .lastName(reservationEntity.getLastName())
-                .reservationTime(reservationEntity.getReservationTime())
-                .numberOfGuests(reservationEntity.getNumberOfGuests())
-                .build();
-    }
-        public static Reservation from(H2ReservationEntity h2ReservationEntity){
-        return Reservation.builder()
-                .id(h2ReservationEntity.getId())
-                .firstName(h2ReservationEntity.getFirstName())
-                .lastName(h2ReservationEntity.getLastName())
-                .reservationTime(h2ReservationEntity.getReservationTime())
-                .numberOfGuests(h2ReservationEntity.getNumberOfGuests())
-                .build();
-    }
-        public static Reservation from(DockerReservationEntity dockerReservationEntity){
+        public static Reservation from(ReservationEntity dockerReservationEntity){
         return Reservation.builder()
                 .id(dockerReservationEntity.getId())
                 .firstName(dockerReservationEntity.getFirstName())
@@ -49,6 +29,4 @@ public class Reservation {
                 .numberOfGuests(dockerReservationEntity.getNumberOfGuests())
                 .build();
     }
-
-
 }

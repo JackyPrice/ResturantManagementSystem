@@ -1,0 +1,19 @@
+version: '3.1'
+
+services:
+
+  restaurant_management_db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_DATABASE: restaurant_management_dc
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - 3306:3306
+    volumes:
+#      - /Users/priceja/Documents/mysqldockervolume:/var/lib/mysql
+      - resturant-management-db-volume:/var/lib/mysql
+
+volumes:
+  resturant-management-db-volume:

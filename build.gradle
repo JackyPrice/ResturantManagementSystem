@@ -8,6 +8,10 @@ group = 'com.JP'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
+bootRun {
+	args = ["--spring.profiles.active=local"]
+}
+
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor

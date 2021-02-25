@@ -2,31 +2,31 @@ package com.jp.resturantmanagementsystem.service;
 
 import com.jp.resturantmanagementsystem.entity.ReservationEntity;
 import com.jp.resturantmanagementsystem.model.Reservation;
-import com.jp.resturantmanagementsystem.repository.ReservationRepository;
+import com.jp.resturantmanagementsystem.repository.ReservationRespository;
 import com.jp.resturantmanagementsystem.util.IdGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
-@Profile("map")
 @Service
 @Slf4j
-public class ReservationServiceImpl implements ReservationService {
+public class ReservationServiceImpl implements ReservationService{
 
-    private final ReservationRepository reservationRepository;
+    private final ReservationRespository reservationRespository;
     private final IdGenerator idGenerator;
 
-    public ReservationServiceImpl(ReservationRepository reservationRepository, IdGenerator idGenerator) {
-        this.reservationRepository = reservationRepository;
+    public ReservationServiceImpl(ReservationRespository reservationRespository, IdGenerator idGenerator) {
+        this.reservationRespository = reservationRespository;
         this.idGenerator = idGenerator;
     }
 
     @Override
     public Reservation createReservation(Reservation reservation) {
-        log.info("Map Service is in effect");
+        log.info("Docker Service is in effect");
         if(reservation.getId() == null ) {
             reservation = reservation.toBuilder()
                     .id(idGenerator.createId(reservation.getFirstName(), reservation.getLastName()))
@@ -34,19 +34,21 @@ public class ReservationServiceImpl implements ReservationService {
         }
 
         ReservationEntity newEntity = ReservationEntity.from(reservation);
-        ReservationEntity savedEntity = reservationRepository.save(newEntity);
+        ReservationEntity savedEntity = reservationRespository.save(newEntity);
         return Reservation.from(savedEntity);
     }
 
     @Override
     public Reservation getReservation(String id) {
-        ReservationEntity savedEntity = reservationRepository.get(id);
+        ReservationEntity savedEntity = reservationRespository.getById(id);
         return Reservation.from(savedEntity);
     }
 
     @Override
     public List<Reservation> getReservations() {
-        return reservationRepository.getAll();
+        return reservationRespository.findAll()
+                .stream().map(Reservation::from)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -57,8 +59,6 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public void deleteReservation(String id) {
-        reservationRepository.deleteById(id);
+        reservationRespository.deleteById(id);
     }
-
-//TODO: look up MapStruct for model for conversions
 }
