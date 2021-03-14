@@ -1,6 +1,8 @@
 package com.jp.resturantmanagementsystem.service;
 
 import com.jp.resturantmanagementsystem.entity.ReservationEntity;
+import com.jp.resturantmanagementsystem.exception.InvalidReservationException;
+import com.jp.resturantmanagementsystem.exception.InvalidReservationIdException;
 import com.jp.resturantmanagementsystem.model.Reservation;
 import com.jp.resturantmanagementsystem.repository.ReservationRespository;
 import com.jp.resturantmanagementsystem.util.IdGenerator;
@@ -123,6 +125,25 @@ class ReservationServiceImplTest {
     }
 
     @Test
+    @DisplayName("given a reservation which contains an Id, when reservation is attempted to be created, an exception is thrown")
+    void createReservationWhichContainsId() {
+        //given
+        Reservation inputReservation1 = Reservation.builder()
+                .id("12345678901")
+                .firstName("test1")
+                .lastName("reservation")
+                .reservationTime(now)
+                .numberOfGuests(2)
+                .build();
+
+        //when
+        reservationServiceImpl.createReservation(inputReservation1);
+
+        //then
+        assertThrows(InvalidReservationException.class, () ->reservationServiceImpl.createReservation(inputReservation1));
+    }
+
+    @Test
     @DisplayName("given valid id, when get is called with id, then the correct reservation is returned")
     void getReservation() {
 
@@ -141,6 +162,24 @@ class ReservationServiceImplTest {
         assertEquals(expectedReservation1, actualReservation1);
         assertEquals(expectedReservation2, actualReservation2);
 
+    }
+
+    @Test
+    @DisplayName("given id of length not equal to 11, when get by id called, then an InvalidReservationIdException is called with the expected message")
+    void getReservationWithInvalidLength(){
+    //    given
+        String invalidLengthId = "invalidLengthId";
+    //    whenThen
+        assertThrows(InvalidReservationIdException.class, () -> reservationServiceImpl.getReservation(invalidLengthId));
+    }
+
+    @Test
+    @DisplayName("given id containing a special character, when get by id called, then an InvalidReservationIdException is called with the expected message")
+    void getReservationWithSpecialCharacters(){
+    //    given
+        String idWithSpecialCharacters = "1234567890@";
+    //    whenThen
+        assertThrows(InvalidReservationIdException.class, () -> reservationServiceImpl.getReservation(idWithSpecialCharacters));
     }
 
     @Test
