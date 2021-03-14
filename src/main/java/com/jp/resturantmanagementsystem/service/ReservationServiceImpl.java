@@ -3,6 +3,7 @@ package com.jp.resturantmanagementsystem.service;
 import com.jp.resturantmanagementsystem.entity.ReservationEntity;
 import com.jp.resturantmanagementsystem.exception.InvalidReservationException;
 import com.jp.resturantmanagementsystem.exception.InvalidReservationIdException;
+import com.jp.resturantmanagementsystem.exception.ReservationNotFoundException;
 import com.jp.resturantmanagementsystem.model.Reservation;
 import com.jp.resturantmanagementsystem.repository.ReservationRespository;
 import com.jp.resturantmanagementsystem.util.IdGenerator;
@@ -48,12 +49,13 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public Reservation updateReservation(String id, Reservation reservation) {
-        Reservation updateReservation = reservation.toBuilder().id(id).build();
+        Reservation updateReservation = checkReservation(id, reservation);
         return saveReservation(updateReservation);
     }
 
     @Override
     public void deleteReservation(String id) {
+        checkExists(id);
         reservationRespository.deleteById(id);
     }
 
@@ -90,6 +92,17 @@ public class ReservationServiceImpl implements ReservationService {
         Matcher m = p.matcher(id);
         if (m.find()) {
             throw new InvalidReservationIdException("Reservation Id can not contain special characters");
+        }
+    }
+
+    private Reservation checkReservation(String id, Reservation reservation){
+        checkExists(id);
+        return reservation.toBuilder().id(id).build();
+    }
+
+    private void checkExists(String id) {
+        if(!reservationRespository.existsById(id)) {
+            throw new ReservationNotFoundException("Reservation not found");
         }
     }
 }

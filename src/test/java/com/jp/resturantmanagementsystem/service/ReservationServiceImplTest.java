@@ -3,6 +3,7 @@ package com.jp.resturantmanagementsystem.service;
 import com.jp.resturantmanagementsystem.entity.ReservationEntity;
 import com.jp.resturantmanagementsystem.exception.InvalidReservationException;
 import com.jp.resturantmanagementsystem.exception.InvalidReservationIdException;
+import com.jp.resturantmanagementsystem.exception.ReservationNotFoundException;
 import com.jp.resturantmanagementsystem.model.Reservation;
 import com.jp.resturantmanagementsystem.repository.ReservationRespository;
 import com.jp.resturantmanagementsystem.util.IdGenerator;
@@ -19,7 +20,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -95,7 +97,7 @@ class ReservationServiceImplTest {
     }
 
     @Test
-    void checkComponents(){
+    void checkComponents() {
         assertThat(reservationRepository).isNotNull();
     }
 
@@ -136,11 +138,8 @@ class ReservationServiceImplTest {
                 .numberOfGuests(2)
                 .build();
 
-        //when
-        reservationServiceImpl.createReservation(inputReservation1);
-
         //then
-        assertThrows(InvalidReservationException.class, () ->reservationServiceImpl.createReservation(inputReservation1));
+        assertThrows(InvalidReservationException.class, () -> reservationServiceImpl.createReservation(inputReservation1));
     }
 
     @Test
@@ -166,19 +165,19 @@ class ReservationServiceImplTest {
 
     @Test
     @DisplayName("given id of length not equal to 11, when get by id called, then an InvalidReservationIdException is called with the expected message")
-    void getReservationWithInvalidLength(){
-    //    given
+    void getReservationWithInvalidLength() {
+        //    given
         String invalidLengthId = "invalidLengthId";
-    //    whenThen
+        //    whenThen
         assertThrows(InvalidReservationIdException.class, () -> reservationServiceImpl.getReservation(invalidLengthId));
     }
 
     @Test
     @DisplayName("given id containing a special character, when get by id called, then an InvalidReservationIdException is called with the expected message")
-    void getReservationWithSpecialCharacters(){
-    //    given
+    void getReservationWithSpecialCharacters() {
+        //    given
         String idWithSpecialCharacters = "1234567890@";
-    //    whenThen
+        //    whenThen
         assertThrows(InvalidReservationIdException.class, () -> reservationServiceImpl.getReservation(idWithSpecialCharacters));
     }
 
@@ -186,8 +185,8 @@ class ReservationServiceImplTest {
     @DisplayName("when getReservations is called, then a list of all reservations are returned")
     void getAllReservations() {
         //    given
-        List<ReservationEntity> savedReservationEntityList = List.of(savedReservationEntity1,savedReservationEntity2,savedReservationEntity3);
-        List<Reservation> expectedReservationList = List.of(expectedReservation1, expectedReservation2,expectedReservation3);
+        List<ReservationEntity> savedReservationEntityList = List.of(savedReservationEntity1, savedReservationEntity2, savedReservationEntity3);
+        List<Reservation> expectedReservationList = List.of(expectedReservation1, expectedReservation2, expectedReservation3);
 
         //    when
         when(reservationRepository.findAll()).thenReturn(savedReservationEntityList);
@@ -241,12 +240,30 @@ class ReservationServiceImplTest {
 
         //    when
         when(reservationRepository.save(updateEntity)).thenReturn(savedEntity);
+        when(reservationRepository.existsById(id)).thenReturn(true);
 
         //    then
 
         Reservation actualReservation = reservationServiceImpl.updateReservation(id, updateReservation);
 
         assertEquals(actualReservation, expectedReservation);
+    }
+
+
+    @Test
+    @DisplayName("given id does not already exist in database, when get by id called, then a ReservationNotFound exc")
+    void updateReservationDoesNotExist() {
+        //    given
+        String id = "tesion10000";
+        Reservation update = Reservation.builder()
+                .firstName("jac")
+                .lastName("reservation")
+                .reservationTime(now)
+                .numberOfGuests(2)
+                .build();
+
+        //    whenThen
+        assertThrows(ReservationNotFoundException.class, () -> reservationServiceImpl.updateReservation(id, update));
     }
 
     @Test
@@ -257,10 +274,22 @@ class ReservationServiceImplTest {
         String id = "tesion10000";
 
         //when
+        when(reservationRepository.existsById(id)).thenReturn(true);
         reservationServiceImpl.deleteReservation(id);
 
         //then
         verify(reservationRepository).deleteById(id);
+    }
+
+    @Test
+    @DisplayName("given a id which does not exist, when delete is called, then ReservationNotFoundException is thrown")
+    void deleteReservationWhichDoesNotExist() {
+
+        //given
+        String id = "tesion10000";
+
+        //when
+        assertThrows(ReservationNotFoundException.class, () -> reservationServiceImpl.deleteReservation(id));
     }
 }
 
