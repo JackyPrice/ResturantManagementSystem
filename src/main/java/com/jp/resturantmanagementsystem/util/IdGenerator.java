@@ -10,9 +10,16 @@ public class IdGenerator {
     public String createId(String firstName, String lastName) {
         firstName = checkLength(firstName);
         lastName = checkLength(lastName);
+        return generateId(firstName, lastName);
+    }
 
-        int randomNum = ThreadLocalRandom.current().nextInt(10000, 99999 + 1);
-        return firstName.substring(0, 3) + lastName.substring(lastName.length() - 3) + randomNum;
+    private String generateId(String firstName, String lastName) {
+            int randomNum = generateRandomNumber();
+            return firstName.substring(0, 3) + lastName.substring(lastName.length() - 3) + randomNum;
+    }
+
+    private int generateRandomNumber() {
+        return ThreadLocalRandom.current().nextInt(10000, 99999 + 1);
     }
 
     private String checkLength(String input) {

@@ -67,13 +67,20 @@ public class ReservationServiceImpl implements ReservationService {
 
     private Reservation validatedReservation(Reservation reservation) {
         if (reservation.getId() == null) {
-            reservation = reservation.toBuilder()
-                    .id(idGenerator.createId(reservation.getFirstName(), reservation.getLastName()))
+            return reservation.toBuilder()
+                    .id(generateUniqueId(reservation))
                     .build();
-            return reservation;
         } else {
             throw new InvalidReservationException("Reservation id must be null at time of creation");
         }
+    }
+
+    private String generateUniqueId(Reservation reservation) {
+        String id;
+        do {
+            id = idGenerator.createId(reservation.getFirstName(), reservation.getLastName());
+        } while (reservationRespository.existsById(reservation.getId()));
+        return id;
     }
 
     private void validateId(String id) {
@@ -95,13 +102,13 @@ public class ReservationServiceImpl implements ReservationService {
         }
     }
 
-    private Reservation checkReservation(String id, Reservation reservation){
+    private Reservation checkReservation(String id, Reservation reservation) {
         checkExists(id);
         return reservation.toBuilder().id(id).build();
     }
 
     private void checkExists(String id) {
-        if(!reservationRespository.existsById(id)) {
+        if (!reservationRespository.existsById(id)) {
             throw new ReservationNotFoundException("Reservation not found");
         }
     }
