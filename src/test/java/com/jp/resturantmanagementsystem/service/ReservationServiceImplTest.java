@@ -192,7 +192,6 @@ class ReservationServiceImplTest {
         when(reservationRepository.findAll()).thenReturn(savedReservationEntityList);
 
         List<Reservation> actualReservationList = reservationServiceImpl.getReservations();
-        System.out.println(actualReservationList);
 
         //    then
         assertEquals(actualReservationList, expectedReservationList);

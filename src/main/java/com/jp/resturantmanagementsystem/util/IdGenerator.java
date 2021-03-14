@@ -8,7 +8,19 @@ import java.util.concurrent.ThreadLocalRandom;
 @Component
 public class IdGenerator {
     public String createId(String firstName, String lastName) {
+        firstName = checkLength(firstName);
+        lastName = checkLength(lastName);
+
         int randomNum = ThreadLocalRandom.current().nextInt(10000, 99999 + 1);
         return firstName.substring(0, 3) + lastName.substring(lastName.length() - 3) + randomNum;
+    }
+
+    private String checkLength(String input) {
+        StringBuilder sb = new StringBuilder(input);
+        if (input.length() < 3) {
+            int diff = 3 - input.length();
+            sb.append("0".repeat(diff));
+        }
+        return sb.toString();
     }
 }

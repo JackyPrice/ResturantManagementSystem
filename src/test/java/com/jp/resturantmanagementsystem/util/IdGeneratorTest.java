@@ -35,8 +35,8 @@ class IdGeneratorTest {
 
         assertTrue(number>=10000);
         assertTrue(number<=99999);
-
     }
+
     @Test
     @DisplayName("given call to createId when id is returned then it uses correct format")
     void createIdCheckString(){
@@ -49,7 +49,21 @@ class IdGeneratorTest {
         String actualString = getSubstring(idGenerated);
 
         assertEquals(expectedString, actualString);
+    }
 
+    @Test
+    @DisplayName("given a first name with less than 3 characters, when createId is called, then id is still generated")
+    void createIdShortFirstname(){
+    //    given
+
+        String firstName = "Jo";
+        String lastName = "Li";
+
+    //    when
+        String generatedId = idGenerator.createId(firstName, lastName);
+
+    //    then
+        assertEquals(11, generatedId.length());
     }
 
     private int getNumber(String idGenerated) {
