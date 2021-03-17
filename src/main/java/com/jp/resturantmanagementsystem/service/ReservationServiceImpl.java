@@ -79,6 +79,7 @@ public class ReservationServiceImpl implements ReservationService {
         String id;
         do {
             id = idGenerator.createId(reservation.getFirstName(), reservation.getLastName());
+            reservation.setId(id);
         } while (reservationRespository.existsById(reservation.getId()));
         return id;
     }
