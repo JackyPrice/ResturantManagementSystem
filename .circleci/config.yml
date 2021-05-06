@@ -23,13 +23,13 @@ jobs:
 
     steps:
       - checkout
+
+      # Download and cache dependencies
       - restore_cache:
-          key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
-      - restore_cache:
-          key: v1-gradle-cache-{{ checksum "build.gradle" }}
-      - run:
-          name: Install dependencies
-          command: ./gradlew build -x test
+          keys:
+            - v1-dependencies-{{ checksum "build.gradle" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
       - save_cache:
           paths:
             - ~/.gradle/wrapper
@@ -38,9 +38,18 @@ jobs:
           paths:
             - ~/.gradle/caches
           key: v1-gradle-cache-{{ checksum "build.gradle" }}
-      - persist_to_workspace:
-          root: .
+
+      - restore_cache:
+          key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+      - restore_cache:
+          key: v1-gradle-cache-{{ checksum "build.gradle" }}
+
+      - run: gradle dependencies
+
+      - save_cache:
           paths:
-            - build
-          # run tests!
-      - run: ./gradlew test
+            - ~/.gradle
+          key: v1-dependencies-{{ checksum "build.gradle" }}
+
+      # run tests!
+      - run: gradle test
