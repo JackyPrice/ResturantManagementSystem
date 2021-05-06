@@ -1,11 +1,25 @@
-version: 2 # use CircleCI 2.0
-jobs: # a collection of steps
+
+version: 2
+jobs:
   build:
-    docker: # run the steps with Docker
-    - image: circleci/openjdk:11.0.3-jdk-stretch # ...with this image as the primary container; this is where all `steps` will run
-    steps: # a collection of executable commands
-      - checkout # check out source code to working directory
-      # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
+    docker:
+      # specify the version you desire here
+      - image: circleci/openjdk:13-jdk
+
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/postgres:9.4
+
+    working_directory: ~/repo
+
+    environment:
+      # Customize the JVM maximum heap limit
+      JVM_OPTS: -Xmx3200m
+      TERM: dumb
+
+    steps:
+      - checkout
       - restore_cache:
           key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
       - restore_cache:
@@ -18,19 +32,20 @@ jobs: # a collection of steps
           paths:
             - ~/.gradle/caches
           key: v1-gradle-cache-{{ checksum "build.gradle" }}
-      - run:
-          name: Assemble JAR
-          command: |
-            # Skip this for other nodes
-            if [ "$CIRCLE_NODE_INDEX" == 0 ]; then
-              ./gradlew assemble
-            fi
-      # As the JAR was only assembled in the first build container, build/libs will be empty in all the other build containers.
-      - store_artifacts:
-          path: build/libs
-      # See https://circleci.com/docs/2.0/deployment-integrations/ for deploy examples
-workflows:
-  version: 2
-  workflow:
-    jobs:
-      - build
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "build.gradle" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      - run: gradle dependencies
+
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: v1-dependencies-{{ checksum "build.gradle" }}
+
+      # run tests!
+      - run: gradle test
