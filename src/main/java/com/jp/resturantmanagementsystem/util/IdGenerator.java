@@ -22,6 +22,7 @@ public class IdGenerator {
         return ThreadLocalRandom.current().nextInt(10000, 99999 + 1);
     }
 
+    //error around first name/last name not existing in request
     private String checkLength(String input) {
         StringBuilder sb = new StringBuilder(input);
         if (input.length() < 3) {

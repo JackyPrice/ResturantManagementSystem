@@ -65,6 +65,7 @@ public class ReservationServiceImpl implements ReservationService {
         return Reservation.from(savedEntity);
     }
 
+    //new exception for null first and last name
     private Reservation validatedReservation(Reservation reservation) {
         if (reservation.getId() == null) {
             return reservation.toBuilder()
